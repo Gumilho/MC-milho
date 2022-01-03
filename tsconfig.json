@@ -1,0 +1,56 @@
+{
+	// Mapped from https://www.typescriptlang.org/tsconfig
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "dist",
+		"rootDir": "src",
+		"paths": {
+			"@discordjs/voice": ["./node_modules/@discordjs/voice"],
+			"@discordjs/opus": ["./node_modules/@discordjs/opus"],
+			"sodium": ["./node_modules/sodium"],
+			"libsodium-wrappers": ["./node_modules/libsodium-wrappers"],
+			"tweetnacl": ["./node_modules/tweetnacl"]
+		},
+
+		"allowJs": true,
+		// Type Checking
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		// if true: conflicts with discord-api-types
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+
+		// Modules
+		"module": "CommonJS",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+
+		// Emit
+		"declaration": true,
+		"importHelpers": true,
+		"importsNotUsedAsValues": "error",
+		"inlineSources": true,
+		"newLine": "lf",
+		"noEmitHelpers": true,
+		"preserveConstEnums": true,
+		"removeComments": false,
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+
+		// Language and Environment
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		"useDefineForClassFields": true,
+
+		// Completeness
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["src/**/__tests__"]
+}

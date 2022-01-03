@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+	provider = "prisma-client-js"
+}
+
+datasource db {
+	provider = "mysql"
+	url      = env("DATABASE_URL")
+}
+
+model Guild {
+	id        		String   	@id
+	name	    	String   
+	channel_id		String   
+	stage_id      	String?	
+	playlists		Playlist[]  @relation(references: [id])
+}
+
+model Playlist {
+	id			String			@id
+	name		String
+	guilds		Guild[] 		@relation(references: [id])
+}
