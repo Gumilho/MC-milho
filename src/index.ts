@@ -1,5 +1,4 @@
-
-require('dotenv').config({ path: '.env' })
+require('dotenv').config({ path: `.env.${process.env.ENV_FILE}` })
 import { Client, Collection, StageChannel } from 'discord.js';
 
 import { PrismaClient } from '@prisma/client'

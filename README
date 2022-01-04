@@ -1,0 +1,4 @@
+## To create a new instance:
+
+Create new entry in `ecosystem.config`, and define a name for the env file by setting ENV_FILE variable.
+Now create a `.env.ENV_FILE` with the BOT_TOKEN and DATABASE_URL variables
