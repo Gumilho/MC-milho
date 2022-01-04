@@ -13,7 +13,6 @@ datasource db {
 model Guild {
 	id        		String   	@id
 	name	    	String   
-	channel_id		String   
 	stage_id      	String?	
 	playlists		Playlist[]  @relation(references: [id])
 }

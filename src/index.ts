@@ -28,7 +28,7 @@ client.on('ready', async client => {
 			return
 		}
 		if (!(stage_channel instanceof StageChannel)) {
-			console.log(`Channel ${entry.channel_id} in guild ${entry.name} is not a Stage Channel`)
+			console.log(`Channel ${entry.stage_id} in guild ${entry.name} is not a Stage Channel`)
 			return
 		}
 		if (entry.playlists.length === 0) {

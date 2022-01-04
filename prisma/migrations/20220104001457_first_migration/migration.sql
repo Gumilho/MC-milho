@@ -2,7 +2,6 @@
 CREATE TABLE `Guild` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
-    `channel_id` VARCHAR(191) NOT NULL,
     `stage_id` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
