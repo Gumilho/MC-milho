@@ -1,4 +1,34 @@
+## Installation
+
+Install all the dependencies
+```
+npm install
+```
+
+Download SQL and create .env with the following variable
+```
+DB_ROOT_PASSWORD=INSERT_MYSQL_ROOT_PASSWORD_HERE
+```
+
+Generate prisma client
+```
+npm run prisma
+```
+
 ## To create a new instance:
 
 Create new entry in `ecosystem.config`, and define a name for the env file by setting ENV_FILE variable.
 Now create a `.env.ENV_FILE` with the BOT_TOKEN and DATABASE_URL variables
+
+## Production Script
+
+```
+npm run build
+npm run start
+```
+
+## Development Script
+
+```
+ENV_FILE=APP_NAME npm run dev
+```
