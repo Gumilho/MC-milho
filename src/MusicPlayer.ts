@@ -1,5 +1,5 @@
 import type { StageChannel } from "discord.js";
-import type { Playlist, Playlist as PlaylistModel, PrismaClient } from "@prisma/client";
+import type { Playlist as PlaylistModel, PrismaClient } from "@prisma/client";
 import { 
 	AudioPlayer, 
 	AudioPlayerStatus, 
@@ -64,7 +64,7 @@ export class MusicPlayer {
 		this.audioPlayer.play(resource)
 	}
 
-	public static async setup(channel: StageChannel, prisma: PrismaClient, playlists: Playlist[]) {
+	public static async setup(channel: StageChannel, prisma: PrismaClient, playlists: PlaylistModel[]) {
 		//guild, stage_channel, prisma, entry.playlists)
 		const newPlayer = new MusicPlayer(channel, prisma, playlists)
 		return newPlayer
