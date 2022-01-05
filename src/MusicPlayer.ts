@@ -22,7 +22,6 @@ export class MusicPlayer {
 		public channel: StageChannel,
 		public prisma: PrismaClient,
 		public playlists: PlaylistModel[],
-		public current: string[]
 	) {
 
 		this.connection = joinVoiceChannel({
@@ -30,30 +29,32 @@ export class MusicPlayer {
 			guildId: channel.guild.id,
 			adapterCreator: channel.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator
 		})
-		this.connection.on('stateChange', (_oldState, newState) => {
+		this.connection.on('stateChange', async (_oldState, newState) => {
 			if (newState.status === 'ready') {
 				console.log('connected')
 				channel.guild.me?.voice.setSuppressed(false)
-				this.play()
+				await this.play()
 			}
 		})
-		// channel.guild.me?.voice.setSuppressed(false)
 		this.connection.subscribe(this.audioPlayer)
 		// this.audioPlayer.on('stateChange', (oldState, newState) => {
 		// 	console.log(`state change from ${oldState.status} to ${newState.status}`)
 		// 	this.update()
 		// })
-		this.audioPlayer.on(AudioPlayerStatus.Idle, () => {
-			this.play()
+		this.audioPlayer.on(AudioPlayerStatus.Idle, async () => {
+			await this.play()
 		})
 	}
 
-	play() {
-		const index = Math.floor(Math.random() * this.current.length)
+	async play() {
+		const playlist = await ytpl(this.playlists[0].id)
+		const current = playlist.items.map(item => `https://www.youtube.com/watch?v=${item.id}`)
+
+		const index = Math.floor(Math.random() * current.length)
 		
-		console.log(`playing ${this.current[index]}`)
+		console.log(`playing ${current[index]}`)
 		const resource = createAudioResource(
-			ytdl(this.current[index], {
+			ytdl(current[index], {
 				highWaterMark: 1024*1024*64,
 				quality: 'highestaudio',
 			}),
@@ -65,10 +66,7 @@ export class MusicPlayer {
 
 	public static async setup(channel: StageChannel, prisma: PrismaClient, playlists: Playlist[]) {
 		//guild, stage_channel, prisma, entry.playlists)
-		const playlist = await ytpl(playlists[0].id)
-		const current = playlist.items.map(item => `https://www.youtube.com/watch?v=${item.id}`)
-
-		const newPlayer = new MusicPlayer(channel, prisma, playlists, current)
+		const newPlayer = new MusicPlayer(channel, prisma, playlists)
 		return newPlayer
 	}
 }
