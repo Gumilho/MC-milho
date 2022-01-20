@@ -6,19 +6,13 @@ generator client {
 }
 
 datasource db {
-	provider = "mysql"
+	provider = "postgresql"
 	url      = env("DATABASE_URL")
 }
 
 model Guild {
 	id        		String   	@id
 	name	    	String   
-	stage_id      	String?	
-	playlists		Playlist[]  @relation(references: [id])
-}
-
-model Playlist {
-	id			String			@id
-	name		String
-	guilds		Guild[] 		@relation(references: [id])
+	stage_id      	String
+	playlist		String?
 }

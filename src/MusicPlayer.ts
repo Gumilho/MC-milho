@@ -1,5 +1,5 @@
-import type { StageChannel } from "discord.js";
-import type { Playlist as PlaylistModel, PrismaClient } from "@prisma/client";
+import type { Guild, StageChannel } from "discord.js";
+import { prisma } from "./index"
 import { 
 	AudioPlayer, 
 	AudioPlayerStatus, 
@@ -20,8 +20,7 @@ export class MusicPlayer {
 
 	constructor(
 		public channel: StageChannel,
-		public prisma: PrismaClient,
-		public playlists: PlaylistModel[],
+		public current: string | null,
 	) {
 
 		this.connection = joinVoiceChannel({
@@ -46,8 +45,22 @@ export class MusicPlayer {
 		})
 	}
 
-	async play() {
-		const playlist = await ytpl(this.playlists[0].id)
+	public static async create(guild: Guild, channelName: string) {
+		
+		const channel = await guild.channels.create(channelName, { type: 'GUILD_STAGE_VOICE' })
+		
+		await prisma.guild.create({
+			data: {
+				id: guild.id,
+				name: guild.name,
+				stage_id: channel.id
+			}
+		})
+		return new MusicPlayer(channel, null)
+	}
+	public async play() {
+		if (!this.current) return
+		const playlist = await ytpl(this.current)
 		const current = playlist.items.map(item => `https://www.youtube.com/watch?v=${item.id}`)
 
 		const index = Math.floor(Math.random() * current.length)
@@ -64,9 +77,21 @@ export class MusicPlayer {
 		this.audioPlayer.play(resource)
 	}
 
-	public static async setup(channel: StageChannel, prisma: PrismaClient, playlists: PlaylistModel[]) {
-		//guild, stage_channel, prisma, entry.playlists)
-		const newPlayer = new MusicPlayer(channel, prisma, playlists)
-		return newPlayer
+	public async setPlaylist(input: string) {
+		
+		if (!/https?:\/\/(www|music)\.?youtube\.com|youtu\.be\/.*/.test(input)) throw new Error("not a youtube URL")
+		const url = new URL(input)
+		if (url.pathname !== '/playlist') throw new Error("not a playlist URL")
+		const id = url.searchParams.get('list')
+		if (!id) throw new Error("no id wtf")
+		const guildId = this.channel.guildId
+		await prisma.guild.update({
+			where: { id: guildId },
+			data: {
+				playlist: id
+			}
+		})
+		this.current = id
+		await this.play()
 	}
 }
